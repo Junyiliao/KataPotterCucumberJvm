@@ -41,3 +41,8 @@ Feature: Kata Potter
     |         2          |           2        |           0        |         0         |          0         |       3040   |
     |         2          |           1        |           2        |         1         |          0         |       4080   |
     |         1          |           2        |           1        |         1         |          1         |       3800   |
+
+  Examples: test edge cases
+    | number of 1st book | number of 2nd book | number of 3rd book | number of 4th book | number of 5th book | lowest price |
+    |         2          |           2        |           2        |         1         |          1         |       5120   |
+    |         5          |           5        |           4        |         5         |          4         |       14120  |

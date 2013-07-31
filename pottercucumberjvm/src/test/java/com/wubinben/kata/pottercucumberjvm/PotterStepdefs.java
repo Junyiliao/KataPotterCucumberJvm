@@ -23,11 +23,11 @@ public class PotterStepdefs {
 
     @Given("^I buy (\\d+) copies of (\\d+)st book$")
     public void I_buy_copies_of_st_book(int numberOfBook, int seriesNumberOfBook) throws Throwable {
-        initializeBasket(basket);
+        initializeBasket();
         putIntoBasket(numberOfBook, seriesNumberOfBook);
     }
 
-    private void initializeBasket(ArrayDeque[] basket) {
+    private void initializeBasket() {
         for(ArrayDeque series : basket) {
             series.clear();
         }
@@ -61,9 +61,64 @@ public class PotterStepdefs {
     public void I_calculate_the_price() throws Throwable {
         int[] seriesBox = {0, 0, 0, 0, 0};
         this.calculatedPrice = 0;
-        while (areThereAnyBooksLeft(this.basket)) {
-            fillSeriesBoxAndCalculatePrice(this.basket, seriesBox);
+        if (hasPatternFiveThree()) {
+            this.calculatedPrice -= 40;
         }
+        while (areThereAnyBooksLeft()) {
+            fillSeriesBoxAndCalculatePrice(seriesBox);
+        }
+    }
+
+    private boolean hasPatternFiveThree() {
+        int[][] basketTwoDArray = convertBasketToTwoDArray();
+        printBasketTwoDArray(basketTwoDArray);
+        int[] differentSeriesCount = countDifferentSeries(basketTwoDArray);
+        for (int i = 0; i < differentSeriesCount.length; i++) {
+            if (differentSeriesCount[i] == 5) {
+                if (differentSeriesCount[i+1] == 3) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void printBasketTwoDArray(int[][] basketTwoDArray) {
+        System.out.print("basketTwoDArray: \n[\n");
+        for (int[] row : basketTwoDArray) {
+            System.out.print("[");
+            for (int cell : row) {
+                System.out.print(cell + ", ");
+            }
+            System.out.println("]");
+        }
+        System.out.println("]");
+    }
+
+    private int[] countDifferentSeries(int[][] basketTwoDArray) {
+        int[] differentSeriesCount = new int[10];
+        int count = 0;
+        for (int i = 0; i < differentSeriesCount.length; i++) {
+            for (int j = 0; j < basketTwoDArray.length; j++) {
+                count += basketTwoDArray[j][i];
+            }
+            differentSeriesCount[i] = count;
+            count = 0;
+        }
+        return differentSeriesCount;
+    }
+
+    private int[][] convertBasketToTwoDArray() {
+        int[][] twoDArray = new int[5][10];
+        for (int i = 0; i < this.basket.length; i++) {
+            for (int j = 0; j < this.basket[i].size(); j++) {
+                if (i > 4 && j > 9) {
+                    throw new IllegalStateException("the 2-d array is only 5x10.");
+                }
+                twoDArray[i][j] = 1;
+            }
+        }
+        return twoDArray;
     }
 
     private void clearSeriesBox(int[] seriesBox) {
@@ -72,7 +127,7 @@ public class PotterStepdefs {
         }
     }
 
-    private void fillSeriesBoxAndCalculatePrice(ArrayDeque[] basket, int[] seriesBox) {
+    private void fillSeriesBoxAndCalculatePrice(int[] seriesBox) {
         clearSeriesBox(seriesBox);
         for (int i = 0; i < basket.length; i++) {
             if (!basket[i].isEmpty()) {
@@ -83,7 +138,7 @@ public class PotterStepdefs {
         calculatePrice(seriesBox);
     }
 
-    private void printBasket(ArrayDeque[] basket) {
+    private void printBasket() {
         for (int i = 0; i < basket.length; i++) {
             System.out.println("==index: " + i + "; size of ArrayDeque:" + basket[i].size());
         }
@@ -117,7 +172,7 @@ public class PotterStepdefs {
         System.out.println("---seriesBox: " + Arrays.toString(seriesBox));
     }
 
-    private boolean areThereAnyBooksLeft(ArrayDeque[] basket) {
+    private boolean areThereAnyBooksLeft() {
         for(ArrayDeque series : basket) {
             if (!series.isEmpty()) {
                 return true;
