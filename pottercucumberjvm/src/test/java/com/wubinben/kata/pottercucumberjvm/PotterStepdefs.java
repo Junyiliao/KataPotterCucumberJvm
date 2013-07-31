@@ -51,12 +51,53 @@ public class PotterStepdefs {
 
     @When("^I calculate the price$")
     public void I_calculate_the_price() throws Throwable {
-        for (ArrayDeque series : this.basket) {
-            while (series != null && !series.isEmpty()) {
-                this.calculatedPrice += 8;
-                series.pop();
+        int[] seriesBox = {0, 0, 0, 0, 0};
+        while (areThereAnyBooksLeft(this.basket)) {
+            fillSeriesBoxAndCalculatePrice(this.basket, seriesBox);
+        }
+    }
+
+    private void fillSeriesBoxAndCalculatePrice(ArrayDeque[] basket, int[] seriesBox) {
+        for (int i = 0; i < basket.length; i++) {
+            if (!basket[i].isEmpty()) {
+                basket[i].pop();
+                seriesBox[i] = 1;
             }
         }
+        calculatePrice(seriesBox);
+    }
+
+    private void calculatePrice(int[] seriesBox) {
+        int bookCount = 0;
+        for (int number : seriesBox) {
+            bookCount += number;
+        }
+        switch (bookCount) {
+            case 1:
+                this.calculatedPrice += 800;
+                break;
+            case 2:
+                this.calculatedPrice += 800 * 2 * 0.95;
+                break;
+            case 3:
+                this.calculatedPrice += 800 * 3 * 0.9;
+                break;
+            case 4:
+                this.calculatedPrice += 800 * 4 * 0.8;
+                break;
+            case 5:
+                this.calculatedPrice += 800 * 5 * 0.75;
+                break;
+        }
+    }
+
+    private boolean areThereAnyBooksLeft(ArrayDeque[] basket) {
+        for(ArrayDeque series : basket) {
+            if (!series.isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Then("^I should get the lowest price (\\d+)$")
