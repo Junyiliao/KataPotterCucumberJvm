@@ -5,6 +5,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
@@ -22,7 +23,14 @@ public class PotterStepdefs {
 
     @Given("^I buy (\\d+) copies of (\\d+)st book$")
     public void I_buy_copies_of_st_book(int numberOfBook, int seriesNumberOfBook) throws Throwable {
+        initializeBasket(basket);
         putIntoBasket(numberOfBook, seriesNumberOfBook);
+    }
+
+    private void initializeBasket(ArrayDeque[] basket) {
+        for(ArrayDeque series : basket) {
+            series.clear();
+        }
     }
 
     @Given("^I buy (\\d+)  copies of (\\d+)nd book$")
@@ -52,12 +60,20 @@ public class PotterStepdefs {
     @When("^I calculate the price$")
     public void I_calculate_the_price() throws Throwable {
         int[] seriesBox = {0, 0, 0, 0, 0};
+        this.calculatedPrice = 0;
         while (areThereAnyBooksLeft(this.basket)) {
             fillSeriesBoxAndCalculatePrice(this.basket, seriesBox);
         }
     }
 
+    private void clearSeriesBox(int[] seriesBox) {
+        for (int i = 0; i < seriesBox.length; i++) {
+            seriesBox[i] = 0;
+        }
+    }
+
     private void fillSeriesBoxAndCalculatePrice(ArrayDeque[] basket, int[] seriesBox) {
+        clearSeriesBox(seriesBox);
         for (int i = 0; i < basket.length; i++) {
             if (!basket[i].isEmpty()) {
                 basket[i].pop();
@@ -65,6 +81,12 @@ public class PotterStepdefs {
             }
         }
         calculatePrice(seriesBox);
+    }
+
+    private void printBasket(ArrayDeque[] basket) {
+        for (int i = 0; i < basket.length; i++) {
+            System.out.println("==index: " + i + "; size of ArrayDeque:" + basket[i].size());
+        }
     }
 
     private void calculatePrice(int[] seriesBox) {
@@ -89,6 +111,10 @@ public class PotterStepdefs {
                 this.calculatedPrice += 800 * 5 * 0.75;
                 break;
         }
+    }
+
+    private void printSeriesBox(int[] seriesBox) {
+        System.out.println("---seriesBox: " + Arrays.toString(seriesBox));
     }
 
     private boolean areThereAnyBooksLeft(ArrayDeque[] basket) {

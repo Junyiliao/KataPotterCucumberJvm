@@ -17,7 +17,7 @@ Feature: Kata Potter
     When I calculate the price
     Then I should get the lowest price <lowest price>
 
-    Examples: test basics
+  Examples: test basics
     | number of 1st book | number of 2nd book | number of 3rd book | number of 4th book | number of 5th book | lowest price |
     |         0          |           0        |           0        |         0         |          0         |       0      |
     |         1          |           0        |           0        |         0         |          0         |       800    |
@@ -34,3 +34,10 @@ Feature: Kata Potter
     |         1          |           0        |           1        |         0         |          1         |       2160   |
     |         1          |           1        |           1        |         0         |          1         |       2560   |
     |         1          |           1        |           1        |         1         |          1         |       3000   |
+
+  Examples: test several discounts
+    | number of 1st book | number of 2nd book | number of 3rd book | number of 4th book | number of 5th book | lowest price |
+    |         2          |           1        |           0        |         0         |          0         |       2320   |
+    |         2          |           2        |           0        |         0         |          0         |       3040   |
+    |         2          |           1        |           2        |         1         |          0         |       4080   |
+    |         1          |           2        |           1        |         1         |          1         |       3800   |
