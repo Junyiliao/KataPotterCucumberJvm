@@ -2,6 +2,8 @@ package com.wubinben.kata.pottercucumberjvm;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,6 +13,7 @@ import java.util.Arrays;
  * To change this template use File | Settings | File Templates.
  */
 public class PotterBookClient {
+    private final static Logger LOGGER = Logger.getLogger(PotterBookClient.class.getName());
     public static final int MAX_SERIES_NUMBER = 5;
     private static ArrayDeque[] basket = {new ArrayDeque(), new ArrayDeque(), new ArrayDeque(), new ArrayDeque(), new ArrayDeque()};
     private static int calculatedPrice = 0;
@@ -24,6 +27,8 @@ public class PotterBookClient {
     }
 
     public static void initializeBasket() {
+        // To turn on logging, set level to be Level.INFO.
+        LOGGER.setLevel(Level.OFF);
         for(ArrayDeque series : basket) {
             series.clear();
         }
@@ -61,18 +66,6 @@ public class PotterBookClient {
         return false;
     }
 
-    private static void printBasketTwoDArray(int[][] basketTwoDArray) {
-        System.out.print("basketTwoDArray: \n[\n");
-        for (int[] row : basketTwoDArray) {
-            System.out.print("[");
-            for (int cell : row) {
-                System.out.print(cell + ", ");
-            }
-            System.out.println("]");
-        }
-        System.out.println("]");
-    }
-
     private static int[] countDifferentSeries(int[][] basketTwoDArray) {
         int[] differentSeriesCount = new int[10];
         int count = 0;
@@ -96,6 +89,7 @@ public class PotterBookClient {
                 twoDArray[i][j] = 1;
             }
         }
+        printBasketTwoDArray(twoDArray);
         return twoDArray;
     }
 
@@ -103,6 +97,7 @@ public class PotterBookClient {
         for (int i = 0; i < seriesBox.length; i++) {
             seriesBox[i] = 0;
         }
+        printSeriesBox(seriesBox);
     }
 
     private static void fillSeriesBoxAndCalculatePrice(int[] seriesBox) {
@@ -116,14 +111,9 @@ public class PotterBookClient {
         calculatePrice(seriesBox);
     }
 
-    private static void printBasket() {
-        for (int i = 0; i < basket.length; i++) {
-            System.out.println("==index: " + i + "; size of ArrayDeque:" + basket[i].size());
-        }
-    }
-
     private static void calculatePrice(int[] seriesBox) {
         int bookCount = 0;
+        printBasket();
         for (int number : seriesBox) {
             bookCount += number;
         }
@@ -146,10 +136,6 @@ public class PotterBookClient {
         }
     }
 
-    private static void printSeriesBox(int[] seriesBox) {
-        System.out.println("---seriesBox: " + Arrays.toString(seriesBox));
-    }
-
     private static boolean areThereAnyBooksLeft() {
         for(ArrayDeque series : basket) {
             if (!series.isEmpty()) {
@@ -157,6 +143,33 @@ public class PotterBookClient {
             }
         }
         return false;
+    }
+
+    private static void printBasketTwoDArray(int[][] basketTwoDArray) {
+        StringBuilder output = new StringBuilder("");
+        output.append("**basketTwoDArray: \n[\n");
+        for (int[] row : basketTwoDArray) {
+            output.append("[");
+            for (int cell : row) {
+                output.append(cell + ", ");
+            }
+            output.append("]");
+        }
+        output.append("]");
+        LOGGER.info(output.toString());
+    }
+
+    private static void printSeriesBox(int[] seriesBox) {
+        LOGGER.info("--seriesBox: " + Arrays.toString(seriesBox));
+    }
+
+    private static void printBasket() {
+        StringBuilder output = new StringBuilder("==basket: [");
+        for (int i = 0; i < basket.length; i++) {
+            output.append(basket[i].size() + ", ");
+        }
+        output.append("]");
+        LOGGER.info(output.toString());
     }
 
 }
