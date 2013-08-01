@@ -18,7 +18,7 @@ public class ShoppingBasket {
 
     public ShoppingBasket() {
         // To turn on logging, set level to be Level.INFO.
-        LOGGER.setLevel(Level.INFO);
+        LOGGER.setLevel(Level.OFF);
     }
 
     public ArrayDeque[] getBasket() {
@@ -63,7 +63,8 @@ public class ShoppingBasket {
     void printBasket() {
         StringBuilder output = new StringBuilder("==basket: [");
         for (int i = 0; i < basket.length; i++) {
-            output.append(basket[i].size() + ", ");
+            output.append(basket[i].size());
+            output.append(",");
         }
         output.append("]");
         LOGGER.info(output.toString());

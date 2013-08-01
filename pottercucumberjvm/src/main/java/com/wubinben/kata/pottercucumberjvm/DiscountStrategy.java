@@ -27,10 +27,10 @@ public class DiscountStrategy {
 
     public DiscountStrategy() {
         // To turn on logging, set level to be Level.INFO.
-        LOGGER.setLevel(Level.INFO);
+        LOGGER.setLevel(Level.OFF);
     }
 
-    public boolean hasPatternFiveThree(ShoppingBasket shoppingBasket) {
+    public boolean hasFiveThreePattern(ShoppingBasket shoppingBasket) {
         shoppingBasket.printBasket();
         int[][] basketTwoDArray = shoppingBasket.convertBasketToTwoDArray();
         int[] differentSeriesCount = countDifferentSeries(basketTwoDArray);

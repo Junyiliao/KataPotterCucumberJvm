@@ -14,12 +14,17 @@ import java.util.logging.Logger;
  */
 public class BookPriceCalculator {
     private int calculatedPrice = 0;
+
     private int[] seriesBox = {0, 0, 0, 0, 0};
     private static final Logger LOGGER = Logger.getLogger(BookPriceCalculator.class.getName());
 
     public BookPriceCalculator() {
         // To turn on logging, set level to be Level.INFO.
-        LOGGER.setLevel(Level.INFO);
+        LOGGER.setLevel(Level.OFF);
+    }
+
+    public int[] getSeriesBox() {
+        return seriesBox;
     }
 
     void calculatePriceForEachSeriesBox(int[] seriesBox) {
@@ -53,13 +58,15 @@ public class BookPriceCalculator {
     }
 
     void calculatePrice(ShoppingBasket shoppingBasket, DiscountStrategy discountStrategy) {
-        if (discountStrategy.hasPatternFiveThree(shoppingBasket)) {
-            setCalculatedPrice(getCalculatedPrice() - DiscountStrategy.CHEAPER_BY_FIVE_THREE_PATTERN);
-            LOGGER.info(">>has pattern five three. calculated price: " + getCalculatedPrice());
-        }
-        while (shoppingBasket.areThereAnyBooksLeft()) {
-            fillSeriesBoxAndCalculatePrice(seriesBox, shoppingBasket);
-        }
+        DiscountHandler fiveThreePatternHandler = FiveThreePatternHandler.newInstance();
+        DiscountHandler maxDifferentSeriesHandler = MaxDifferentSeriesHandler.newInstance();
+        DiscountHandler nullHandler = NullHandler.newInstance();
+
+        fiveThreePatternHandler.setSuccessor(maxDifferentSeriesHandler);
+        maxDifferentSeriesHandler.setSuccessor(nullHandler);
+
+        fiveThreePatternHandler.handleRequest(shoppingBasket, discountStrategy, this);
+
     }
 
     public int getCalculatedPrice() {
@@ -78,7 +85,7 @@ public class BookPriceCalculator {
         printSeriesBox(seriesBox);
     }
 
-    private void fillSeriesBoxAndCalculatePrice(int[] seriesBox, ShoppingBasket shoppingBasket) {
+    public void fillSeriesBoxAndCalculatePrice(int[] seriesBox, ShoppingBasket shoppingBasket) {
         clearSeriesBox(seriesBox);
         ArrayDeque[] basket = shoppingBasket.getBasket();
         for (int i = 0; i < basket.length; i++) {
