@@ -9,8 +9,9 @@ Feature: Kata Potter
   The unit of price is cent.
 
   Scenario Outline: potter tests
-    Given I buy <number of 1st book> copies of 1st book
-    And I buy <number of 2nd book>  copies of 2nd book
+    Given I clear my shopping basket
+    And I buy <number of 1st book> copies of 1st book
+    And I buy <number of 2nd book> copies of 2nd book
     And I buy <number of 3rd book> copies of 3rd book
     And I buy <number of 4th book> copies of 4th book
     And I buy <number of 5th book> copies of 5th book
