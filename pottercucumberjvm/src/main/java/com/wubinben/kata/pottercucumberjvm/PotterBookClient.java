@@ -13,10 +13,24 @@ import java.util.logging.Logger;
  * To change this template use File | Settings | File Templates.
  */
 public class PotterBookClient {
-    private final static Logger LOGGER = Logger.getLogger(PotterBookClient.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(PotterBookClient.class.getName());
     public static final int MAX_SERIES_NUMBER = 5;
+    public static final int CHEAPER_BY_FIVE_THREE_PATTERN = 40;
+    public static final int FIVE_THREE_PATTERN_FIVE = 5;
+    public static final int FIVE_THREE_PATTERN_THREE = 3;
+    public static final int MAX_NUMBER_OF_COPIES_FOR_EACH_SERIES = 10;
+    public static final int PRICE_FOR_EACH_BOOK_WITHOUT_DISCOUNT = 800;
+    public static final double DISCOUNT_FOR_TWO_SERIES = 0.95;
+    public static final double DISCOUNT_FOR_THREE_SERIES = 0.9;
+    public static final double DISCOUNT_FOR_FOUR_SERIES = 0.8;
+    public static final double DISCOUNT_FOR_FIVE_SERIES = 0.75;
     private static ArrayDeque[] basket = {new ArrayDeque(), new ArrayDeque(), new ArrayDeque(), new ArrayDeque(), new ArrayDeque()};
     private static int calculatedPrice = 0;
+
+    /**
+     * Utility classes should not have a public or default constructor.
+     */
+    private PotterBookClient () {}
 
     public static int getCalculatedPrice() {
         return calculatedPrice;
@@ -47,7 +61,7 @@ public class PotterBookClient {
         int[] seriesBox = {0, 0, 0, 0, 0};
         setCalculatedPrice(0);
         if (hasPatternFiveThree()) {
-            setCalculatedPrice(getCalculatedPrice() - 40);
+            setCalculatedPrice(getCalculatedPrice() - CHEAPER_BY_FIVE_THREE_PATTERN);
         }
         while (areThereAnyBooksLeft()) {
             fillSeriesBoxAndCalculatePrice(seriesBox);
@@ -57,17 +71,15 @@ public class PotterBookClient {
         int[][] basketTwoDArray = convertBasketToTwoDArray();
         int[] differentSeriesCount = countDifferentSeries(basketTwoDArray);
         for (int i = 0; i < differentSeriesCount.length; i++) {
-            if (differentSeriesCount[i] == 5) {
-                if (differentSeriesCount[i+1] == 3) {
-                    return true;
-                }
+            if (differentSeriesCount[i] == FIVE_THREE_PATTERN_FIVE && differentSeriesCount[i+1] == FIVE_THREE_PATTERN_THREE) {
+                return true;
             }
         }
         return false;
     }
 
     private static int[] countDifferentSeries(int[][] basketTwoDArray) {
-        int[] differentSeriesCount = new int[10];
+        int[] differentSeriesCount = new int[MAX_NUMBER_OF_COPIES_FOR_EACH_SERIES];
         int count = 0;
         for (int i = 0; i < differentSeriesCount.length; i++) {
             for (int j = 0; j < basketTwoDArray.length; j++) {
@@ -80,10 +92,10 @@ public class PotterBookClient {
     }
 
     private static int[][] convertBasketToTwoDArray() {
-        int[][] twoDArray = new int[5][10];
+        int[][] twoDArray = new int[MAX_SERIES_NUMBER][MAX_NUMBER_OF_COPIES_FOR_EACH_SERIES];
         for (int i = 0; i < basket.length; i++) {
             for (int j = 0; j < basket[i].size(); j++) {
-                if (i > 4 && j > 9) {
+                if (i >= MAX_SERIES_NUMBER && j >= MAX_NUMBER_OF_COPIES_FOR_EACH_SERIES) {
                     throw new IllegalStateException("the 2-d array is only 5x10.");
                 }
                 twoDArray[i][j] = 1;
@@ -119,20 +131,22 @@ public class PotterBookClient {
         }
         switch (bookCount) {
             case 1:
-                calculatedPrice += 800;
+                calculatedPrice += PRICE_FOR_EACH_BOOK_WITHOUT_DISCOUNT;
                 break;
             case 2:
-                calculatedPrice += 800 * 2 * 0.95;
+                calculatedPrice += PRICE_FOR_EACH_BOOK_WITHOUT_DISCOUNT * 2 * DISCOUNT_FOR_TWO_SERIES;
                 break;
             case 3:
-                calculatedPrice += 800 * 3 * 0.9;
+                calculatedPrice += PRICE_FOR_EACH_BOOK_WITHOUT_DISCOUNT * 3 * DISCOUNT_FOR_THREE_SERIES;
                 break;
             case 4:
-                calculatedPrice += 800 * 4 * 0.8;
+                calculatedPrice += PRICE_FOR_EACH_BOOK_WITHOUT_DISCOUNT * 4 * DISCOUNT_FOR_FOUR_SERIES;
                 break;
             case 5:
-                calculatedPrice += 800 * 5 * 0.75;
+                calculatedPrice += PRICE_FOR_EACH_BOOK_WITHOUT_DISCOUNT * 5 * DISCOUNT_FOR_FIVE_SERIES;
                 break;
+            default:
+                throw new IllegalStateException("the number of series should be within " + MAX_SERIES_NUMBER);
         }
     }
 
