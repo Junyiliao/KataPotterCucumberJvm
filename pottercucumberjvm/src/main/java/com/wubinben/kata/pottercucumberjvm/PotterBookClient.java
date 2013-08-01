@@ -11,6 +11,7 @@ import java.util.Arrays;
  * To change this template use File | Settings | File Templates.
  */
 public class PotterBookClient {
+    public static final int MAX_SERIES_NUMBER = 5;
     private static ArrayDeque[] basket = {new ArrayDeque(), new ArrayDeque(), new ArrayDeque(), new ArrayDeque(), new ArrayDeque()};
     private static int calculatedPrice = 0;
 
@@ -29,8 +30,8 @@ public class PotterBookClient {
     }
 
     public static void putIntoBasket(int numberOfBook, int seriesNumberOfBook) {
-        if (seriesNumberOfBook <=0 || seriesNumberOfBook >=6) {
-            throw new IllegalStateException("series number of book should be between 1 and 5.");
+        if (seriesNumberOfBook <= 0 || seriesNumberOfBook > MAX_SERIES_NUMBER ) {
+            throw new IllegalStateException("series number of book should be between 1 and " + MAX_SERIES_NUMBER);
         }
         for (int i = 0; i < numberOfBook; i++) {
             basket[seriesNumberOfBook - 1].push(PotterBook.newInstance());
@@ -60,7 +61,7 @@ public class PotterBookClient {
         return false;
     }
 
-    private void printBasketTwoDArray(int[][] basketTwoDArray) {
+    private static void printBasketTwoDArray(int[][] basketTwoDArray) {
         System.out.print("basketTwoDArray: \n[\n");
         for (int[] row : basketTwoDArray) {
             System.out.print("[");
@@ -115,7 +116,7 @@ public class PotterBookClient {
         calculatePrice(seriesBox);
     }
 
-    private void printBasket() {
+    private static void printBasket() {
         for (int i = 0; i < basket.length; i++) {
             System.out.println("==index: " + i + "; size of ArrayDeque:" + basket[i].size());
         }
@@ -145,7 +146,7 @@ public class PotterBookClient {
         }
     }
 
-    private void printSeriesBox(int[] seriesBox) {
+    private static void printSeriesBox(int[] seriesBox) {
         System.out.println("---seriesBox: " + Arrays.toString(seriesBox));
     }
 
