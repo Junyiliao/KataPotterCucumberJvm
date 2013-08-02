@@ -15,7 +15,7 @@ public class MaxDifferentSeriesHandler extends DiscountHandler {
     @Override
     public void handleRequest(ShoppingBasket shoppingBasket, DiscountStrategy discountStrategy, BookPriceCalculator bookPriceCalculator) {
         while (shoppingBasket.areThereAnyBooksLeft()) {
-            bookPriceCalculator.fillSeriesBoxAndCalculatePrice(bookPriceCalculator.getSeriesBox(), shoppingBasket);
+            bookPriceCalculator.fillSeriesBoxAndCalculatePrice(shoppingBasket);
         }
         if (!(getSuccessor() instanceof NullHandler)) {
             getSuccessor().handleRequest(shoppingBasket, discountStrategy, bookPriceCalculator);

@@ -1,7 +1,5 @@
 package com.wubinben.kata.pottercucumberjvm;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,7 +13,6 @@ import java.util.logging.Logger;
 public class BookPriceCalculator {
     private int calculatedPrice = 0;
 
-    private int[] seriesBox = {0, 0, 0, 0, 0};
     private static final Logger LOGGER = Logger.getLogger(BookPriceCalculator.class.getName());
 
     public BookPriceCalculator() {
@@ -23,9 +20,6 @@ public class BookPriceCalculator {
         LOGGER.setLevel(Level.OFF);
     }
 
-    public int[] getSeriesBox() {
-        return seriesBox;
-    }
 
     void calculatePriceForEachSeriesBox(int[] seriesBox) {
         int bookCount = 0;
@@ -53,10 +47,6 @@ public class BookPriceCalculator {
         }
     }
 
-    void printSeriesBox(int[] seriesBox) {
-        LOGGER.info("--seriesBox: " + Arrays.toString(seriesBox));
-    }
-
     void calculatePrice(ShoppingBasket shoppingBasket, DiscountStrategy discountStrategy) {
         DiscountHandler fiveThreePatternHandler = FiveThreePatternHandler.newInstance();
         DiscountHandler maxDifferentSeriesHandler = MaxDifferentSeriesHandler.newInstance();
@@ -78,22 +68,9 @@ public class BookPriceCalculator {
     }
 
 
-    void clearSeriesBox(int[] seriesBox) {
-        for (int i = 0; i < seriesBox.length; i++) {
-            seriesBox[i] = 0;
-        }
-        printSeriesBox(seriesBox);
+
+    public void fillSeriesBoxAndCalculatePrice(ShoppingBasket shoppingBasket) {
+        calculatePriceForEachSeriesBox(shoppingBasket.generateSeriesBox());
     }
 
-    public void fillSeriesBoxAndCalculatePrice(int[] seriesBox, ShoppingBasket shoppingBasket) {
-        clearSeriesBox(seriesBox);
-        ArrayDeque[] basket = shoppingBasket.getBasket();
-        for (int i = 0; i < basket.length; i++) {
-            if (!basket[i].isEmpty()) {
-                basket[i].pop();
-                seriesBox[i] = 1;
-            }
-        }
-        calculatePriceForEachSeriesBox(seriesBox);
-    }
 }

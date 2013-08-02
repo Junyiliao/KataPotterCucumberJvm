@@ -54,7 +54,7 @@ public class DiscountStrategy {
             count = 0;
         }
         printDifferentSeriesCount(differentSeriesCount);
-        return differentSeriesCount;
+        return differentSeriesCount.clone();
     }
 
     private void printDifferentSeriesCount(int[] differentSeriesCount) {
