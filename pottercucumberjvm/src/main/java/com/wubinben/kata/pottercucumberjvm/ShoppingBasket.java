@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  */
 public class ShoppingBasket {
     private  ArrayDeque[] basket = {new ArrayDeque(), new ArrayDeque(), new ArrayDeque(), new ArrayDeque(), new ArrayDeque()};
-    int[][] twoDArray = new int[DiscountStrategy.MAX_SERIES_NUMBER][DiscountStrategy.MAX_NUMBER_OF_COPIES_FOR_EACH_SERIES];
+    private int[][] twoDArray = new int[DiscountStrategy.MAX_SERIES_NUMBER][DiscountStrategy.MAX_NUMBER_OF_COPIES_FOR_EACH_SERIES];
     private static final Logger LOGGER = Logger.getLogger(ShoppingBasket.class.getName());
     private int[] seriesBox = {0, 0, 0, 0, 0};
 

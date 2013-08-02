@@ -23,7 +23,7 @@ public class DiscountStrategy {
     public static final double DISCOUNT_FOR_THREE_SERIES = 0.9;
     public static final double DISCOUNT_FOR_FOUR_SERIES = 0.8;
     public static final double DISCOUNT_FOR_FIVE_SERIES = 0.75;
-    int[] differentSeriesCount = new int[DiscountStrategy.MAX_NUMBER_OF_COPIES_FOR_EACH_SERIES];
+    private int[] differentSeriesCount = new int[DiscountStrategy.MAX_NUMBER_OF_COPIES_FOR_EACH_SERIES];
 
     public DiscountStrategy() {
         // To turn on logging, set level to be Level.INFO.
@@ -33,7 +33,7 @@ public class DiscountStrategy {
     public boolean hasFiveThreePattern(ShoppingBasket shoppingBasket) {
         shoppingBasket.printBasket();
         int[][] basketTwoDArray = shoppingBasket.convertBasketToTwoDArray();
-        int[] differentSeriesCount = countDifferentSeries(basketTwoDArray);
+        countDifferentSeries(basketTwoDArray);
         for (int i = 0; i < differentSeriesCount.length - 1; i++) {
             LOGGER.info("==Going to check differentSeriesCount[" + i + "]: " + differentSeriesCount[i] + "; differentSeriesCount[" + (i+1) + "]: " + differentSeriesCount[i+1]);
             if (differentSeriesCount[i] == FIVE_THREE_PATTERN_FIVE && differentSeriesCount[i+1] == FIVE_THREE_PATTERN_THREE) {
@@ -44,7 +44,7 @@ public class DiscountStrategy {
         return false;
     }
 
-    public int[] countDifferentSeries(int[][] basketTwoDArray) {
+    public void countDifferentSeries(int[][] basketTwoDArray) {
         int count = 0;
         for (int i = 0; i < differentSeriesCount.length; i++) {
             for (int j = 0; j < basketTwoDArray.length; j++) {
@@ -54,7 +54,6 @@ public class DiscountStrategy {
             count = 0;
         }
         printDifferentSeriesCount(differentSeriesCount);
-        return differentSeriesCount.clone();
     }
 
     private void printDifferentSeriesCount(int[] differentSeriesCount) {
