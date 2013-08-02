@@ -26,8 +26,6 @@ public class FiveThreePatternHandler extends DiscountHandler {
             bookPriceCalculator.setCalculatedPrice(bookPriceCalculator.getCalculatedPrice() - DiscountStrategy.CHEAPER_BY_FIVE_THREE_PATTERN);
             LOGGER.info(">>has pattern five three. calculated price: " + bookPriceCalculator.getCalculatedPrice());
         }
-        if (!(getSuccessor() instanceof NullHandler)) {
-            getSuccessor().handleRequest(shoppingBasket, discountStrategy, bookPriceCalculator);
-        }
+        getSuccessor().handleRequest(shoppingBasket, discountStrategy, bookPriceCalculator);
     }
 }

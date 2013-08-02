@@ -14,6 +14,6 @@ public class NullHandler extends DiscountHandler {
 
     @Override
     public void handleRequest(ShoppingBasket shoppingBasket, DiscountStrategy discountStrategy, BookPriceCalculator bookPriceCalculator) {
-        throw new IllegalStateException("cannot invoke handle request method in NullHandler.");
+        // End of the chain of responsibilities. Do nothing.
     }
 }
